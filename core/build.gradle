@@ -1,0 +1,11 @@
+apply plugin: "java"
+
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+dependencies {
+    implementation 'com.github.wangGame.LibGdxTool:libGdx:+'
+    //自己的工具包
+    implementation 'com.github.wangGame.LibGdxTool:libGdxLib:+'
+}
+
+sourceSets.main.java.srcDirs = [ "src/" ]

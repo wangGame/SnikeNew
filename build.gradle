@@ -1,0 +1,30 @@
+//apply plugin: "idea"
+buildscript {
+    repositories {
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/public'}
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.4'
+
+    }
+}
+allprojects {
+    apply plugin: "idea"
+    version = "1.0"
+    ext {
+        appName = "Word Stack"
+    }
+    repositories {
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/public'}
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        flatDir {
+            dirs 'libs'  // 申明本地库
+        }
+    }
+}

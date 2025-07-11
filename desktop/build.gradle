@@ -1,0 +1,42 @@
+apply plugin: "java"
+
+sourceCompatibility = 1.8
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+project.ext.mainClassName = "com.kangwang.word.DesktopLauncher"
+project.ext.assetsDir = new File("../android/assets");
+
+task run(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+}
+
+dependencies {
+    implementation project(':core')
+    implementation files('libs/gdx-backend-lwjgl.jar')
+    implementation files('libs/gdx-backend-lwjgl-natives.jar')
+    implementation files("libs/lwjgl-2.9.3.jar")
+    implementation files("libs/jorbis-0.0.17.jar")
+
+
+    implementation files('libs/gdx-tools.jar')
+    implementation 'com.github.wangGame.LibGdxTool:libGdx:release+'
+    //自己的工具包
+    implementation 'com.github.wangGame.LibGdxTool:libGdxLib:release+'
+}
+
+
+task dist(type: Jar) {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
