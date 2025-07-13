@@ -53,8 +53,8 @@ public class GameView extends Group {
 
     public void genFood(){
         if (foodNode!=null)foodNode.remove();
-        int x = (int) (Math.random() * getWidth());
-        int y = (int) (Math.random() * getHeight());
+        int x = (int) (Math.random() * (getWidth() - SnikeConstant.tableSize));
+        int y = (int) (Math.random() * (getHeight() - SnikeConstant.tableSize));
         foodNode = new Node((int) (x/SnikeConstant.tableSize), (int) (y/SnikeConstant.tableSize));
         addActor(foodNode);
     }
@@ -76,7 +76,7 @@ public class GameView extends Group {
         head = snike.getHead();
         if (foodNode!=null){
             if (head.getPosX() == foodNode.getPosX() && head.getPosY() == foodNode.getPosY()){
-                snike.addNode();
+                snike.addNode(foodNode);
                 genFood();
             }
         }else {
@@ -94,14 +94,14 @@ public class GameView extends Group {
                     current.set(head.getPosX(),distanceEnd);
                 }else if (currentDir == Direction.DOWN){
                     int distanceEnd = head.getPosY() - distance;
-                    if (distanceEnd * SnikeConstant.tableSize <= 0){
-                        distanceEnd = (int) (Constant.GAMEHIGHT/SnikeConstant.tableSize);
+                    if (distanceEnd * SnikeConstant.tableSize <0){
+                        distanceEnd = (int) ((Constant.GAMEHIGHT)/SnikeConstant.tableSize);
                     }
                     current.set(head.getPosX(),distanceEnd);
                 }else if (currentDir == Direction.LEFT){
                     int distanceEnd = head.getPosX() - distance;
-                    if (distanceEnd * SnikeConstant.tableSize <= 0){
-                        distanceEnd = (int) (Constant.GAMEWIDTH/SnikeConstant.tableSize);
+                    if (distanceEnd * SnikeConstant.tableSize < 0){
+                        distanceEnd = (int) ((Constant.GAMEWIDTH - SnikeConstant.tableSize)/SnikeConstant.tableSize);
                     }
                     current.set(distanceEnd,head.getPosY());
                 }else if (currentDir == Direction.RIGHT){
