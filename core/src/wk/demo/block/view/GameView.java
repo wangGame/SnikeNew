@@ -30,15 +30,7 @@ public class GameView extends Group {
         setSize(Constant.GAMEWIDTH,Constant.GAMEHIGHT);
         snike = new NodeSnike((int) (getWidth()/2f/ SnikeConstant.tableSize), (int) (getHeight()/2f/SnikeConstant.tableSize),this);
         head = snike.getHead();
-//        tempAction =Actions.forever(Actions.delay(0.4F,Actions.run(
-//                ()->{
-//                    snike.addNode();
-//
-//            }
-//        )));
-
         currentDir = Direction.LEFT;
-
         InputAdapter adapter = new InputAdapter(){
             @Override
             public boolean keyDown(int keycode) {
