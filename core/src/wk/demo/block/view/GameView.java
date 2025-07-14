@@ -45,8 +45,8 @@ public class GameView extends Group {
 
     public void genFood(){
         if (foodNode!=null)foodNode.remove();
-        int x = (int) (Math.random() * getWidth());
-        int y = (int) (Math.random() * getHeight());
+        int x = (int) (Math.random() * (getWidth() - SnikeConstant.tableSize));
+        int y = (int) (Math.random() * (getHeight() - SnikeConstant.tableSize));
         foodNode = new Node((int) (x/SnikeConstant.tableSize), (int) (y/SnikeConstant.tableSize));
         addActor(foodNode);
     }
@@ -56,7 +56,6 @@ public class GameView extends Group {
         super.act(delta);
         time += delta;
         if (time>0.1f) {
-            time = 0;
             move();
         }
         handler();
@@ -64,11 +63,12 @@ public class GameView extends Group {
 
 
     public void move(){
+        time = 0;
         int distance  = 1;
         head = snike.getHead();
         if (foodNode!=null){
             if (head.getPosX() == foodNode.getPosX() && head.getPosY() == foodNode.getPosY()){
-                snike.addNode();
+                snike.addNode(foodNode);
                 genFood();
             }
         }else {
@@ -79,13 +79,29 @@ public class GameView extends Group {
             if (prePos.x == Integer.MAX_VALUE) {
                 prePos.set(head.getPosX(),head.getPosY());
                 if (currentDir == Direction.UP){
-                    current.set(head.getPosX(),head.getPosY()+distance);
+                    int distanceEnd = head.getPosY() + distance;
+                    if (distanceEnd * SnikeConstant.tableSize >= Constant.GAMEHIGHT){
+                        distanceEnd = 0;
+                    }
+                    current.set(head.getPosX(),distanceEnd);
                 }else if (currentDir == Direction.DOWN){
-                    current.set(head.getPosX(),head.getPosY()-distance);
+                    int distanceEnd = head.getPosY() - distance;
+                    if (distanceEnd * SnikeConstant.tableSize <0){
+                        distanceEnd = (int) ((Constant.GAMEHIGHT)/SnikeConstant.tableSize);
+                    }
+                    current.set(head.getPosX(),distanceEnd);
                 }else if (currentDir == Direction.LEFT){
-                    current.set(head.getPosX()-distance,head.getPosY());
+                    int distanceEnd = head.getPosX() - distance;
+                    if (distanceEnd * SnikeConstant.tableSize < 0){
+                        distanceEnd = (int) ((Constant.GAMEWIDTH - SnikeConstant.tableSize)/SnikeConstant.tableSize);
+                    }
+                    current.set(distanceEnd,head.getPosY());
                 }else if (currentDir == Direction.RIGHT){
-                    current.set(head.getPosX()+distance,head.getPosY());
+                    int distanceEnd = head.getPosX() + distance;
+                    if (distanceEnd * SnikeConstant.tableSize >= Constant.GAMEWIDTH){
+                        distanceEnd = 0;
+                    }
+                    current.set(distanceEnd,head.getPosY());
                 }
                 head.setPosX((int) current.x);
                 head.setPosY((int) current.y);
@@ -103,15 +119,27 @@ public class GameView extends Group {
 
 
     public void handler(){
+        Direction oldDir = currentDir;
         //上  下   左  右
         if (Gdx.input.isKeyPressed(19)) {
-            currentDir = Direction.UP;
+            if (oldDir != Direction.DOWN){
+                currentDir = Direction.UP;
+            }
         }else if (Gdx.input.isKeyPressed(20)){
-            currentDir = Direction.DOWN;
+            if (oldDir != Direction.UP){
+                currentDir = Direction.DOWN;
+            }
         }else if (Gdx.input.isKeyPressed(21)){
-            currentDir = Direction.LEFT;
+            if (oldDir != Direction.RIGHT) {
+                currentDir = Direction.LEFT;
+            }
         }else if (Gdx.input.isKeyPressed(22)){
-            currentDir = Direction.RIGHT;
+            if (oldDir != Direction.LEFT){
+                currentDir = Direction.RIGHT;
+            }
+        }
+        if (oldDir!=currentDir){
+//            move();
         }
     }
 }

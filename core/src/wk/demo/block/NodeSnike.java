@@ -12,14 +12,14 @@ public class NodeSnike {
 
     public NodeSnike(int startX, int startY, GameView gameView){
         this.gameView = gameView;
-        head = new Node(startX,startY);
+        head = new Node(startX,startY,"chngcong.jpg");
         gameView.addActor(head);
         head.next = null;
         end = head;
     }
 
-    public void addNode (){
-        Node node = new Node(end.getPosX(),end.getPosY());
+    public void addNode (Node nodeFood){
+        Node node = new Node(end.getPosX(),end.getPosY(),nodeFood.getTexture());
         gameView.addActor(node);
         end.next = node;
         end = node;
